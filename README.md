@@ -1,5 +1,5 @@
 # telescope
-website and arduino code for my telescope
+website and arduino/esp32-cam code for my telescope
 
 mostly self-explanatory.
 
