@@ -1,0 +1,18 @@
+const char* ssid = "verens";
+const char* password = "thepassword";
+String serverName = "your.telescope.domain.name.com";
+String serverIP = "192.168.1.12";
+String serverPath = "/upload.php";
+
+const unsigned long timerInterval = 10000;    // time between each HTTP POST image
+const int stepsPerRevolution = 2048;
+const int serverPort = 80;
+
+const int stepPlatform1=2;
+const int stepPlatform2=1;
+const int stepPlatform3=3;
+const int stepPlatform4=4;
+const int stepElevation1=15;
+const int stepElevation2=14;
+const int stepElevation3=12;
+const int stepElevation4=13;
