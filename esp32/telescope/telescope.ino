@@ -25,18 +25,40 @@ void loop() {
     result=json;
     DynamicJsonDocument obj(1024);
     deserializeJson(obj, json);
-    int mv=obj["platform"];
-    if (mv) {
+    int v=obj["platform"];
+    if (v) {
       stepperOff();
-      platformStepper.step(mv);
-      stepperOff();
-    }
-    mv=obj["elevation"];
-    if (mv) {
-      stepperOff();
-      elevationStepper.step(mv);
+      platformStepper.step(v);
       stepperOff();
     }
+    v=obj["elevation"];
+    if (v) {
+      stepperOff();
+      elevationStepper.step(v);
+      stepperOff();
+    }
+    sensor_t * s = esp_camera_sensor_get();
+    if (obj.containsKey("vflip")) s->set_vflip(s, (int)obj["vflip"]);          // 0 = disable , 1 = enable
+    if (obj.containsKey("gain_ctrl")) s->set_gain_ctrl(s, obj["gain_ctrl"]);      // 0 = disable , 1 = enable
+    if (obj.containsKey("agc_gain")) s->set_agc_gain(s, obj["agc_gain"]);       // 0 to 30
+    if (obj.containsKey("brightness")) s->set_brightness(s, obj["brightness"]);     // -2 to 2
+    if (obj.containsKey("contrast")) s->set_contrast(s, obj["contrast"]);       // -2 to 2
+    if (obj.containsKey("saturation")) s->set_saturation(s, obj["saturation"]);     // -2 to 2
+    if (obj.containsKey("whitebal")) s->set_whitebal(s, obj["whitebal"]);       // 0 = disable , 1 = enable
+    if (obj.containsKey("awb_gain")) s->set_awb_gain(s, obj["awb_gain"]);       // 0 = disable , 1 = enable
+    if (obj.containsKey("wb_mode")) s->set_wb_mode(s, obj["wb_mode"]);        // 0 to 4 - if awb_gain enabled (0 - Auto, 1 - Sunny, 2 - Cloudy, 3 - Office, 4 - Home)
+    if (obj.containsKey("exposure_ctrl")) s->set_exposure_ctrl(s, obj["exposure_ctrl"]);  // 0 = disable , 1 = enable
+    if (obj.containsKey("aec2")) s->set_aec2(s, obj["aec2"]);           // 0 = disable , 1 = enable
+    if (obj.containsKey("ae_level")) s->set_ae_level(s, obj["ae_level"]);       // -2 to 2
+    if (obj.containsKey("aec_value")) s->set_aec_value(s, obj["aec_value"]);    // 0 to 1200
+    if (obj.containsKey("gainceiling")) s->set_gainceiling(s, (gainceiling_t)obj["gainceiling"]);  // 0 to 6
+    if (obj.containsKey("bpc")) s->set_bpc(s, obj["bpc"]);            // 0 = disable , 1 = enable
+    if (obj.containsKey("wpc")) s->set_wpc(s, obj["wpc"]);            // 0 = disable , 1 = enable
+    if (obj.containsKey("raw_gma")) s->set_raw_gma(s, obj["raw_gma"]);        // 0 = disable , 1 = enable
+    if (obj.containsKey("lenc")) s->set_lenc(s, obj["lenc"]);           // 0 = disable , 1 = enable
+    if (obj.containsKey("hmirror")) s->set_hmirror(s, obj["hmirror"]);        // 0 = disable , 1 = enable
+    if (obj.containsKey("dcw")) s->set_dcw(s, obj["dcw"]);            // 0 = disable , 1 = enable
+    if (obj.containsKey("colorbar")) s->set_colorbar(s, obj["colorbar"]);       // 0 = disable , 1 = enable
   }
   unsigned long currentMillis = millis();
   unsigned long diff=currentMillis-prevMillis;
@@ -79,7 +101,6 @@ void setup() {
   config.pin_reset = -1;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
-
   config.frame_size = FRAMESIZE_UXGA;
   config.jpeg_quality = 2;  // 5 works. 0 does not.
   config.fb_count = 2;
